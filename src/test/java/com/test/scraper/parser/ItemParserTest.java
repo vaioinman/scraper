@@ -1,72 +1,111 @@
 package com.test.scraper.parser;
 
 import com.test.scraper.bean.Item;
-import org.hamcrest.Matchers;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ItemParserTest {
 
-    @Autowired
-    private ItemParser itemParser;
+    @Mock
+    Fetcher fetcher;
+
+    @InjectMocks
+    ItemParser itemParser = new ItemParserImpl();
+
 
     @Test
-    public void shouldReturnItemWithTitleAndPrice() {
-        String givenItemHtml = getItemHtml();
+    public void shouldReturnCompleteItem() throws IOException {
+        // Given a valid item section
+        Document givenItemHtml = getItemHtml();
+        when(fetcher.fetchDocument(anyString())).thenReturn(getDescriptionHtml());
 
+        // When parser parses it
+        Item completeItem = itemParser.extractCompleteItem(givenItemHtml);
+
+        // Then we see item title, unit price, energy and description
+        assertThat(completeItem.getTitle(), is("Sainsbury's Strawberries 400g"));
+        assertThat(completeItem.getUnitPrice(), is(1.75));
+        assertThat(completeItem.getDescription(), is("by Sainsbury's raspberries"));
+        assertThat(completeItem.getKcalPer100g(), is(32));
+    }
+
+    @Test
+    public void shouldReturnItemWithTitleAndPrice() throws Exception {
+        // Given a valid item section
+        Document givenItemHtml = getItemHtml();
+
+        // When parser parses it
         Item item = itemParser.extractItem(givenItemHtml);
 
+        // Then we see item title and unit price
         assertThat(item.getTitle(), is("Sainsbury's Strawberries 400g"));
         assertThat(item.getUnitPrice(), is(1.75));
     }
 
     @Test
     public void shouldNotReturnItem() {
+        // Given a valid item section
+        // When parser parses it
         Item item = itemParser.extractItem(getInvalidItemHtml());
+
+        // Then we dont see an item returned
         assertThat(item, nullValue());
     }
 
     @Test
     public void shouldReturnItemWithDescriptionAndNutrition() {
-        String givenItemDescription = getDescriptionHtml();
+        // Given a valid item description page and an item
+        Document givenItemDescription = getDescriptionHtml();
         Item givenItem = new Item();
 
-        itemParser.extractDescriptionAndNutrition(givenItemDescription, givenItem);
+        // When parser parses it
+        itemParser.extractDescriptionAndNutritionIntoItem(givenItemDescription, givenItem);
 
+        // Then we see item populated with description and energy
         assertThat(givenItem.getDescription(), is("by Sainsbury's raspberries"));
         assertThat(givenItem.getKcalPer100g(), is(32));
     }
 
     @Test
     public void shouldNotReturnItemDescriptionAndNutrition() {
-        String givenItemDescriptionHtml = getInvalidDescriptionHtml();
+        // Given an invalid item description page and an item
+        Document givenItemDescriptionHtml = getInvalidDescriptionHtml();
         Item givenItem = Item.builder().build();
 
-        itemParser.extractDescriptionAndNutrition(givenItemDescriptionHtml, givenItem);
+        // When parser parses it
+        itemParser.extractDescriptionAndNutritionIntoItem(givenItemDescriptionHtml, givenItem);
 
+        // Then we dont see item with description and energy
         assertThat(givenItem.getDescription(), nullValue());
         assertThat(givenItem.getKcalPer100g(), nullValue());
     }
 
-    private String getInvalidDescriptionHtml() {
-        return "Invalid item description html";
+    private Document getInvalidDescriptionHtml() {
+        return Jsoup.parse("Invalid item description html");
     }
 
-    private String getInvalidItemHtml() {
-        return "Invalid item html";
+    private Document getInvalidItemHtml() {
+        return Jsoup.parse("Invalid item html");
     }
 
-    private String getItemHtml() {
-        return "<li class=\"gridItem\">\n" +
+    private Document getItemHtml() {
+        String html = "<li class=\"gridItem\">\n" +
                 "\t                                <!-- BEGIN CatalogEntryThumbnailDisplay.jsp --><!-- BEGIN MerchandisingAssociationsDisplay.jsp --><!-- Start - JSP File Name:  MerchandisingAssociationsDisplay.jsp --><!-- END MerchandisingAssociationsDisplay.jsp -->\n" +
                 "            <div class=\"product \">\n" +
                 "            \t\n" +
@@ -171,10 +210,12 @@ public class ItemParserTest {
                 "            </div>\n" +
                 "            <!--ThumbnailRestriction --><!-- END CatalogEntryThumbnailDisplay.jsp -->\n" +
                 "\t                            </div></li>";
+
+        return Jsoup.parse(html);
     }
 
-    private String getDescriptionHtml() {
-        return "<div class=\"section\" id=\"information\">\n" +
+    private Document getDescriptionHtml() {
+        return Jsoup.parse("<div class=\"section\" id=\"information\">\n" +
                 "                <h2 class=\"access\">Information</h2>\n" +
                 "                <productcontent xmlns:a=\"http://www.inspire-js.com/SOL\">\n" +
                 "<htmlcontent contentpath=\"/Content/media/html/products/label//_label_inspire.html\" outputmethod=\"xhtml\">\n" +
@@ -267,6 +308,6 @@ public class ItemParserTest {
                 "\n" +
                 "                <p></p><h3>Important Information</h3><p>The above details have been prepared to help you select suitable products. Products and their ingredients are liable to change.</p><p><strong>You should always read the label before consuming or using the product and never rely solely on the information presented here.</strong></p><p>If you require specific advice on any Sainsbury's branded product, please contact our Customer Careline on 0800 636262. For all other products, please contact the manufacturer.</p><p>\n" +
                 "This information is supplied for your personal use only. It may not be reproduced in any way without the prior consent of Sainsbury's Supermarkets Ltd and due acknowledgement.</p><p></p>\n" +
-                "            </div>";
+                "            </div>");
     }
 }
