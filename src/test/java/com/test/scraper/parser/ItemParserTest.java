@@ -30,7 +30,7 @@ public class ItemParserTest {
 
 
     @Test
-    public void shouldReturnCompleteItem() throws IOException {
+    public void shouldReturnCompleteItem() throws Exception {
         // Given a valid item section
         Document givenItemHtml = getItemHtml();
         when(fetcher.fetchDocument(anyString())).thenReturn(getDescriptionHtml());
@@ -46,7 +46,7 @@ public class ItemParserTest {
     }
 
     @Test
-    public void shouldReturnItemWithTitleAndPrice() throws Exception {
+    public void shouldReturnItemWithTitleAndPrice() {
         // Given a valid item section
         Document givenItemHtml = getItemHtml();
 
