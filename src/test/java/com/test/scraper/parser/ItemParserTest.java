@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
 @RunWith(SpringRunner.class)
@@ -21,7 +22,9 @@ public class ItemParserTest {
     @Test
     public void shouldReturnItem() {
         Item item = itemParser.extractItem(getItemHtml());
-        assertThat(item.getTitle(), Matchers.is("Sainsbury's Strawberries 400g"));
+
+        assertThat(item.getTitle(), is("Sainsbury's Strawberries 400g"));
+        assertThat(item.getUnitPrice(), is(1.75));
     }
 
     @Test

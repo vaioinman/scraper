@@ -10,4 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 public class Item {
     private String title;
+    private Double unitPrice;
+    
 }
