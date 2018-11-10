@@ -1,4 +1,4 @@
-package com.test.scraper.parser;
+package com.test.scraper.utility;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -2,6 +2,7 @@ package com.test.scraper.parser;
 
 import com.test.scraper.TestApplicationConfiguration;
 import com.test.scraper.bean.ItemBean;
+import com.test.scraper.utility.Fetcher;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
