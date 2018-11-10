@@ -41,9 +41,9 @@ class ScraperApplication implements CommandLineRunner {
             System.out.println("Valid URL is found. Scraping...\n");
             List<ItemBean> itemBeans = pageParser.extractItems(pageDocument);
 
-            System.out.println("Scraping is done. Showing result in JSON...\n");
             String resultJSON = ItemsToJsonStringConverter.convertToJsonString(itemBeans);
 
+            System.out.println("Scraping is done. Showing result in JSON...\n");
             System.out.println(resultJSON);
 
             System.out.println("----------------------- END ----------------------");

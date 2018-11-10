@@ -30,7 +30,7 @@ public class PageParserTest {
     PageParser pageParser = new PageParserImpl();
 
     @Test
-    public void shouldReturnItems() throws Exception {
+    public void shouldCallItemParserAndReturnItems() throws Exception {
         // Given a valid product page
         ItemBean stub = ItemBean.builder()
                 .title("Stub")

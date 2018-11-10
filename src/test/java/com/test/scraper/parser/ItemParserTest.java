@@ -2,6 +2,7 @@ package com.test.scraper.parser;
 
 import com.test.scraper.TestApplicationConfiguration;
 import com.test.scraper.bean.ItemBean;
+import com.test.scraper.exception.MalformedDataException;
 import com.test.scraper.utility.Fetcher;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +47,7 @@ public class ItemParserTest {
     }
 
     @Test
-    public void shouldReturnItemWithTitleAndPrice() {
+    public void shouldReturnItemWithTitleAndPrice() throws MalformedDataException {
         // Given a valid item section
         Document givenItemHtml = getItemHtml();
 
@@ -59,18 +59,17 @@ public class ItemParserTest {
         assertThat(item.getUnitPrice(), is(1.75));
     }
 
-    @Test
-    public void shouldNotReturnItem() {
+    @Test(expected = MalformedDataException.class)
+    public void shouldNotReturnItem() throws MalformedDataException {
         // Given a valid item section
         // When parser parses it
         ItemBean item = itemParser.extractItem(getInvalidItemHtml());
 
-        // Then we dont see an item returned
-        assertThat(item, nullValue());
+        // Then we expect exception
     }
 
     @Test
-    public void shouldReturnItemWithDescriptionAndNutrition() {
+    public void shouldReturnItemWithDescriptionAndNutrition() throws MalformedDataException {
         // Given a valid item description page and an item
         Document givenItemDescription = getDescriptionHtml();
         ItemBean givenItem = new ItemBean();
@@ -83,8 +82,8 @@ public class ItemParserTest {
         assertThat(givenItem.getKcalPer100g(), is(32));
     }
 
-    @Test
-    public void shouldNotReturnItemDescriptionAndNutrition() {
+    @Test(expected = MalformedDataException.class)
+    public void shouldNotReturnItemDescriptionAndNutrition() throws MalformedDataException {
         // Given an invalid item description page and an item
         Document givenItemDescriptionHtml = getInvalidDescriptionHtml();
         ItemBean givenItem = ItemBean.builder().build();
@@ -92,9 +91,7 @@ public class ItemParserTest {
         // When parser parses it
         itemParser.extractDescriptionAndNutritionIntoItem(givenItemDescriptionHtml, givenItem);
 
-        // Then we dont see item with description and energy
-        assertThat(givenItem.getDescription(), nullValue());
-        assertThat(givenItem.getKcalPer100g(), nullValue());
+        // Then we expect exception
     }
 
     private Document getInvalidDescriptionHtml() {

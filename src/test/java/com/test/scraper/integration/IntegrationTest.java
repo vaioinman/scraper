@@ -3,16 +3,12 @@ package com.test.scraper.integration;
 import com.test.scraper.TestApplicationConfiguration;
 import com.test.scraper.bean.ItemBean;
 import com.test.scraper.parser.PageParser;
-import com.test.scraper.parser.PageParserImpl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.stereotype.Component;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
