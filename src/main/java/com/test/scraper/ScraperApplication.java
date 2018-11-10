@@ -1,21 +1,14 @@
 package com.test.scraper;
 
-import com.test.scraper.bean.ItemBean;
-import com.test.scraper.parser.PageParser;
-import com.test.scraper.utility.ItemsToJsonStringConverter;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
-
 @SpringBootApplication
 class ScraperApplication implements CommandLineRunner {
 	@Autowired
-	private PageParser pageParser;
+	private Scraper scraper;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ScraperApplication.class, args);
@@ -31,11 +24,7 @@ class ScraperApplication implements CommandLineRunner {
         System.out.println("----------------- Grocery Scraper -----------------");
 
         try {
-            Document pageDocument = Jsoup.connect(args[0]).get();
-            System.out.println("Valid URL is found. Scraping...\n");
-            List<ItemBean> itemBeans = pageParser.extractItems(pageDocument);
-
-            String resultJSON = ItemsToJsonStringConverter.convertToJsonString(itemBeans);
+            String resultJSON = scraper.scrape(args[0]);
 
             System.out.println("Scraping is done. Showing result in JSON...\n");
             System.out.println(resultJSON);
