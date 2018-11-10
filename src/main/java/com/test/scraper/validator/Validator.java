@@ -2,7 +2,7 @@ package com.test.scraper.validator;
 
 import com.test.scraper.bean.ItemBean;
 
-class Validator {
+public class Validator {
     public static boolean validate(ItemBean item) {
         return item.getTitle() != null
                 && item.getUnitPrice() != null

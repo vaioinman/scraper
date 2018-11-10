@@ -1,6 +1,7 @@
 package com.test.scraper.parser;
 
 import com.test.scraper.bean.ItemBean;
+import com.test.scraper.validator.Validator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,7 +28,11 @@ public class PageParserImpl implements PageParser {
         for (Element element: elements) {
             try {
                 Document itemDocument = Jsoup.parse(element.html());
-                items.add(itemParser.extractCompleteItem(itemDocument));
+                ItemBean item = itemParser.extractCompleteItem(itemDocument);
+                if (Validator.validate(item)) {
+                    items.add(item);
+
+                }
             } catch (Exception e) {
             }
         }
