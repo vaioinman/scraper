@@ -29,7 +29,7 @@ public class IntegrationTest {
     public void integrationTest() throws Exception {
         List<ItemBean> items = pageParser.extractItems(getProductPageDocument());
 
-        assertThat(items, hasSize(12));
+        assertThat(items, hasSize(13));
     }
 
     private Document getProductPageDocument() throws IOException {

@@ -16,7 +16,10 @@ public class ItemParserImpl implements ItemParser {
     private static final String ITEM_NAME_SELECTOR = "div.product > div.productInfo > div > h3 > a";
     private static final String ITEM_PRICE_SELECTOR = "div.pricing > p.pricePerUnit";
     private static final String ITEM_DESCRIPTION_SELECTOR = "#information > productcontent > htmlcontent > div:nth-child(2)";
+    private static final String ITEM_MEMO_SELECTOR = "#mainPart > div:nth-child(1) > div.memo > p";
+
     private static final String ITEM_ENERGY_SELECTOR = "#information > productcontent > htmlcontent > div:nth-child(4) > div > div > table > tbody > tr:nth-child(2) > td:nth-child(1)";
+    private static final String ITEM_ENERGY_IN_TABLE_SELECTOR = "#mainPart > div:nth-child(2) > div > div > div.tableWrapper > table > tbody > tr:nth-child(2) > td:nth-child(2)";
     private static final String ITEM_DESCRIPTION_URL_SELECTOR = "div.product > div.productInfo > div > h3 > a";
     private static final String DELIMITER = "/";
     private static final String CURRENCY = "£";
@@ -52,7 +55,11 @@ public class ItemParserImpl implements ItemParser {
 
         Element descriptionElement = html.select(ITEM_DESCRIPTION_SELECTOR).first();
         if (descriptionElement == null) {
-            throw new MalformedDataException("Description section cannot be found.");
+            // try memo section
+            descriptionElement = html.select(ITEM_MEMO_SELECTOR).first();
+            if (descriptionElement == null) {
+                throw new MalformedDataException("Description section cannot be found.");
+            }
         }
         String description = descriptionElement.text().indexOf("\n") != -1
                 ? descriptionElement.text().substring(descriptionElement.text().indexOf("\n"))
@@ -61,7 +68,11 @@ public class ItemParserImpl implements ItemParser {
 
         Element energyElement = html.select(ITEM_ENERGY_SELECTOR).first();
         if (energyElement == null) {
-            throw new MalformedDataException("Energy (kcal per 100g) section cannot be found.");
+            // try to find at another place
+            energyElement = html.select(ITEM_ENERGY_IN_TABLE_SELECTOR).first();
+            if (energyElement == null) {
+                throw new MalformedDataException("Energy (kcal per 100g) section cannot be found.");
+            }
         }
         givenItem.setKcalPer100g(convertToEnergy(energyElement.text()));
     }
@@ -70,12 +81,12 @@ public class ItemParserImpl implements ItemParser {
     public ItemBean extractCompleteItem(Document html) throws IOException, MalformedDataException {
         ItemBean item = extractItem(html);
 
-        Element el = html.select(ITEM_DESCRIPTION_URL_SELECTOR).first();
-        if (el == null) {
+        Element element = html.select(ITEM_DESCRIPTION_URL_SELECTOR).first();
+        if (element == null) {
             throw new MalformedDataException("Link to description is not found.");
         }
 
-        Document descriptionDocument = fetcher.fetchDocument(el.attr(HREF));
+        Document descriptionDocument = fetcher.fetchDocument(element.attr(HREF));
         extractDescriptionAndNutritionIntoItem(descriptionDocument, item);
 
         return item;
