@@ -1,5 +1,6 @@
 package com.test.scraper.parser;
 
+import com.test.scraper.TestApplicationConfiguration;
 import com.test.scraper.bean.ItemBean;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,7 +19,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = TestApplicationConfiguration.class)
 public class PageParserTest {
 
     @Mock
@@ -31,7 +32,13 @@ public class PageParserTest {
     @Test
     public void shouldReturnItems() throws Exception {
         // Given a valid product page
-        when(itemParser.extractCompleteItem(ArgumentMatchers.any())).thenReturn(new ItemBean());
+        ItemBean stub = ItemBean.builder()
+                .title("Stub")
+                .unitPrice(1.0)
+                .description("Stub")
+                .kcalPer100g(1)
+                .build();
+        when(itemParser.extractCompleteItem(ArgumentMatchers.any())).thenReturn(stub);
 
         // When we call page parser
         List<ItemBean> items = pageParser.extractItems(givenProductPage());

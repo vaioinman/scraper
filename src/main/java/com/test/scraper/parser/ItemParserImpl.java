@@ -1,6 +1,7 @@
 package com.test.scraper.parser;
 
 import com.test.scraper.bean.ItemBean;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class ItemParserImpl implements ItemParser {
     private static final String DELIMITER = "/";
     private static final String CURRENCY = "£";
     private static final String ENERGY_UNIT = "kcal";
-    private static final String HREF = "href";
+    private static final String HREF = "abs:href";
 
     @Autowired
     private Fetcher fetcher;
@@ -67,12 +68,9 @@ public class ItemParserImpl implements ItemParser {
         ItemBean item = extractItem(html);
 
         if (item != null) {
-            String descriptionUrl = html.select(ITEM_DESCRIPTION_URL_SELECTOR)
-                    .first()
-                    .attr(HREF);
-            extractDescriptionAndNutritionIntoItem(
-                    fetcher.fetchDocument(descriptionUrl),
-                    item);
+            Element el = html.select(ITEM_DESCRIPTION_URL_SELECTOR).first();
+            Document descriptionDocument = fetcher.fetchDocument(el.attr(HREF));
+            extractDescriptionAndNutritionIntoItem(descriptionDocument, item);
         }
 
         return item;

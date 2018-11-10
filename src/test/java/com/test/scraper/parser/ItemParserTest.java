@@ -1,5 +1,6 @@
 package com.test.scraper.parser;
 
+import com.test.scraper.TestApplicationConfiguration;
 import com.test.scraper.bean.ItemBean;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,7 +18,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = TestApplicationConfiguration.class)
 public class ItemParserTest {
 
     @Mock

@@ -8,7 +8,7 @@ import com.test.scraper.bean.TotalBean;
 
 import java.util.List;
 
-class ItemsToJsonStringConverter {
+public class ItemsToJsonStringConverter {
     private static final Double VAT = 0.2;
 
     public static String convertToJsonString(List<ItemBean> items) throws JsonProcessingException {
