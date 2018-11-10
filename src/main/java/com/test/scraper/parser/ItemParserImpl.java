@@ -1,6 +1,6 @@
 package com.test.scraper.parser;
 
-import com.test.scraper.bean.Item;
+import com.test.scraper.bean.ItemBean;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class ItemParserImpl implements ItemParser {
     private Fetcher fetcher;
 
     @Override
-    public Item extractItem(Document html) {
-        Item item = null;
+    public ItemBean extractItem(Document html) {
+        ItemBean item = null;
 
         Element nameElement = html.select(ITEM_NAME_SELECTOR).first();
         String productName = nameElement != null ? nameElement.text() : null;
@@ -34,7 +34,7 @@ public class ItemParserImpl implements ItemParser {
         Double productPrice = priceElement != null ? convertToPrice(priceElement.text()) : null;
 
         if (productName != null && productPrice != null) {
-            item = Item.builder()
+            item = ItemBean.builder()
                     .title(productName)
                     .unitPrice(productPrice)
                     .build();
@@ -44,7 +44,7 @@ public class ItemParserImpl implements ItemParser {
     }
 
     @Override
-    public void extractDescriptionAndNutritionIntoItem(Document html, Item givenItem) {
+    public void extractDescriptionAndNutritionIntoItem(Document html, ItemBean givenItem) {
         Element descriptionElement = html.select(ITEM_DESCRIPTION_SELECTOR).first();
         if (descriptionElement != null) {
             givenItem.setDescription(descriptionElement.text());
@@ -63,8 +63,8 @@ public class ItemParserImpl implements ItemParser {
     }
 
     @Override
-    public Item extractCompleteItem(Document html) throws IOException {
-        Item item = extractItem(html);
+    public ItemBean extractCompleteItem(Document html) throws IOException {
+        ItemBean item = extractItem(html);
 
         if (item != null) {
             String descriptionUrl = html.select(ITEM_DESCRIPTION_URL_SELECTOR)

@@ -1,6 +1,6 @@
 package com.test.scraper.parser;
 
-import com.test.scraper.bean.Item;
+import com.test.scraper.bean.ItemBean;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
@@ -9,8 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -26,6 +24,7 @@ public class ItemParserTest {
     Fetcher fetcher;
 
     @InjectMocks
+    private
     ItemParser itemParser = new ItemParserImpl();
 
 
@@ -36,7 +35,7 @@ public class ItemParserTest {
         when(fetcher.fetchDocument(anyString())).thenReturn(getDescriptionHtml());
 
         // When parser parses it
-        Item completeItem = itemParser.extractCompleteItem(givenItemHtml);
+        ItemBean completeItem = itemParser.extractCompleteItem(givenItemHtml);
 
         // Then we see item title, unit price, energy and description
         assertThat(completeItem.getTitle(), is("Sainsbury's Strawberries 400g"));
@@ -51,7 +50,7 @@ public class ItemParserTest {
         Document givenItemHtml = getItemHtml();
 
         // When parser parses it
-        Item item = itemParser.extractItem(givenItemHtml);
+        ItemBean item = itemParser.extractItem(givenItemHtml);
 
         // Then we see item title and unit price
         assertThat(item.getTitle(), is("Sainsbury's Strawberries 400g"));
@@ -62,7 +61,7 @@ public class ItemParserTest {
     public void shouldNotReturnItem() {
         // Given a valid item section
         // When parser parses it
-        Item item = itemParser.extractItem(getInvalidItemHtml());
+        ItemBean item = itemParser.extractItem(getInvalidItemHtml());
 
         // Then we dont see an item returned
         assertThat(item, nullValue());
@@ -72,7 +71,7 @@ public class ItemParserTest {
     public void shouldReturnItemWithDescriptionAndNutrition() {
         // Given a valid item description page and an item
         Document givenItemDescription = getDescriptionHtml();
-        Item givenItem = new Item();
+        ItemBean givenItem = new ItemBean();
 
         // When parser parses it
         itemParser.extractDescriptionAndNutritionIntoItem(givenItemDescription, givenItem);
@@ -86,7 +85,7 @@ public class ItemParserTest {
     public void shouldNotReturnItemDescriptionAndNutrition() {
         // Given an invalid item description page and an item
         Document givenItemDescriptionHtml = getInvalidDescriptionHtml();
-        Item givenItem = Item.builder().build();
+        ItemBean givenItem = ItemBean.builder().build();
 
         // When parser parses it
         itemParser.extractDescriptionAndNutritionIntoItem(givenItemDescriptionHtml, givenItem);

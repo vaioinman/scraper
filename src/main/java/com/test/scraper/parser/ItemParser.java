@@ -1,12 +1,12 @@
 package com.test.scraper.parser;
 
-import com.test.scraper.bean.Item;
+import com.test.scraper.bean.ItemBean;
 import org.jsoup.nodes.Document;
 
-public interface ItemParser {
-    Item extractItem(Document html);
+interface ItemParser {
+    ItemBean extractItem(Document html);
 
-    void extractDescriptionAndNutritionIntoItem(Document givenItemDescription, Item givenItem);
+    void extractDescriptionAndNutritionIntoItem(Document givenItemDescription, ItemBean givenItem);
 
-    Item extractCompleteItem(Document html) throws Exception;
+    ItemBean extractCompleteItem(Document html) throws Exception;
 }

@@ -1,6 +1,6 @@
 package com.test.scraper.parser;
 
-import com.test.scraper.bean.Item;
+import com.test.scraper.bean.ItemBean;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
@@ -25,15 +25,16 @@ public class PageParserTest {
     ItemParser itemParser;
 
     @InjectMocks
+    private
     PageParser pageParser = new PageParserImpl();
 
     @Test
     public void shouldReturnItems() throws Exception {
         // Given a valid product page
-        when(itemParser.extractCompleteItem(ArgumentMatchers.any())).thenReturn(new Item());
+        when(itemParser.extractCompleteItem(ArgumentMatchers.any())).thenReturn(new ItemBean());
 
         // When we call page parser
-        List<Item> items = pageParser.extractItems(givenProductPage());
+        List<ItemBean> items = pageParser.extractItems(givenProductPage());
 
         // Then we see parser call item parser and items are returned
         verify(itemParser, times(7)).extractCompleteItem(ArgumentMatchers.any());

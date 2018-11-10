@@ -1,6 +1,6 @@
 package com.test.scraper.parser;
 
-import com.test.scraper.bean.Item;
+import com.test.scraper.bean.ItemBean;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PageParserImpl implements PageParser {
@@ -21,9 +20,9 @@ public class PageParserImpl implements PageParser {
     private ItemParser itemParser;
 
     @Override
-    public List<Item> extractItems(Document pageDocument) {
+    public List<ItemBean> extractItems(Document pageDocument) {
         Elements elements = pageDocument.select(GRID_SELECTOR);
-        List<Item> items = new ArrayList<>();
+        List<ItemBean> items = new ArrayList<>();
 
         for (Element element: elements) {
             try {

@@ -8,7 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class Item {
+public class ItemBean {
     private String title;
 
     private Double unitPrice;

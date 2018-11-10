@@ -1,14 +1,15 @@
 package com.test.scraper.validator;
 
-import com.test.scraper.bean.Item;
+import com.test.scraper.bean.ItemBean;
 import org.junit.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class ValidatorTest {
     @Test
     public void mustBeValid() {
-        Item item = Item.builder()
+        ItemBean item = ItemBean.builder()
                 .title("Title")
                 .unitPrice(10.1)
                 .description("Description")
@@ -21,7 +22,7 @@ public class ValidatorTest {
 
     @Test
     public void givenItemWithoutTitle_mustReturnFalse() {
-        Item item = Item.builder()
+        ItemBean item = ItemBean.builder()
                 .unitPrice(10.1)
                 .description("Description")
                 .kcalPer100g(5)
@@ -33,7 +34,7 @@ public class ValidatorTest {
 
     @Test
     public void givenItemWithoutDescription_mustReturnFalse() {
-        Item item = Item.builder()
+        ItemBean item = ItemBean.builder()
                 .title("Title")
                 .unitPrice(10.1)
                 .kcalPer100g(5)
@@ -45,7 +46,7 @@ public class ValidatorTest {
 
     @Test
     public void givenItemWithoutUnitPrice_mustReturnFalse() {
-        Item item = Item.builder()
+        ItemBean item = ItemBean.builder()
                 .title("Title")
                 .description("Description")
                 .kcalPer100g(5)
@@ -57,7 +58,7 @@ public class ValidatorTest {
 
     @Test
     public void givenItemWithoutEnergy_mustReturnFalse() {
-        Item item = Item.builder()
+        ItemBean item = ItemBean.builder()
                 .title("Title")
                 .description("Description")
                 .unitPrice(10.1)
