@@ -33,7 +33,6 @@ public class PageParserImpl implements PageParser {
                 ItemBean item = itemParser.extractCompleteItem(itemDocument);
                 if (Validator.validate(item)) {
                     items.add(item);
-
                 }
             } catch (Exception e) {
                 System.err.println("Error found but carry on. Printing stacktrace...");

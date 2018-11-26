@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.MalformedInputException;
 
 @Component
@@ -41,7 +42,7 @@ public class ItemParserImpl implements ItemParser {
         if (priceElement == null) {
             throw new MalformedDataException("Price per unit section cannot be found.");
         }
-        Double productPrice = convertToPrice(priceElement.text());
+        BigDecimal productPrice = convertToPrice(priceElement.text());
 
         return ItemBean.builder()
                 .title(itemName)
@@ -92,11 +93,11 @@ public class ItemParserImpl implements ItemParser {
         return item;
     }
 
-    private Double convertToPrice(String text) throws MalformedDataException {
+    private BigDecimal convertToPrice(String text) throws MalformedDataException {
         String priceString = text.substring(text.indexOf(CURRENCY) + 1, text.indexOf(DELIMITER));
 
         try {
-            return Double.parseDouble(priceString);
+            return new BigDecimal(priceString);
         } catch (NumberFormatException e) {
             throw new MalformedDataException("Cannot convert price per unit text.", e);
         }

@@ -3,6 +3,8 @@ package com.test.scraper.validator;
 import com.test.scraper.bean.ItemBean;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -11,7 +13,7 @@ public class ValidatorTest {
     public void mustBeValid() {
         ItemBean item = ItemBean.builder()
                 .title("Title")
-                .unitPrice(10.1)
+                .unitPrice(new BigDecimal(10.1))
                 .description("Description")
                 .kcalPer100g(5)
                 .build();
@@ -23,7 +25,7 @@ public class ValidatorTest {
     @Test
     public void givenItemWithoutTitle_mustReturnFalse() {
         ItemBean item = ItemBean.builder()
-                .unitPrice(10.1)
+                .unitPrice(new BigDecimal(10.1))
                 .description("Description")
                 .kcalPer100g(5)
                 .build();
@@ -36,7 +38,7 @@ public class ValidatorTest {
     public void givenItemWithoutDescription_mustReturnFalse() {
         ItemBean item = ItemBean.builder()
                 .title("Title")
-                .unitPrice(10.1)
+                .unitPrice(new BigDecimal(10.1))
                 .kcalPer100g(5)
                 .build();
 
@@ -61,7 +63,7 @@ public class ValidatorTest {
         ItemBean item = ItemBean.builder()
                 .title("Title")
                 .description("Description")
-                .unitPrice(10.1)
+                .unitPrice(new BigDecimal(10.1))
                 .build();
 
         boolean valid = Validator.validate(item);

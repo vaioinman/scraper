@@ -4,6 +4,7 @@ package com.test.scraper.utility;
 import com.test.scraper.bean.ItemBean;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class ItemsToJsonStringConverterTest {
 
         ItemBean item1 = ItemBean.builder()
                 .title("Item 1")
-                .unitPrice(1.5)
+                .unitPrice(new BigDecimal(1.5))
                 .description("Desc 1")
                 .kcalPer100g(22)
                 .build();
@@ -26,7 +27,7 @@ public class ItemsToJsonStringConverterTest {
 
         ItemBean item2 = ItemBean.builder()
                 .title("Item 2")
-                .unitPrice(2.5)
+                .unitPrice(new BigDecimal(2.5))
                 .description("Desc 2")
                 .kcalPer100g(33)
                 .build();
@@ -34,7 +35,7 @@ public class ItemsToJsonStringConverterTest {
 
         ItemBean item3 = ItemBean.builder()
                 .title("Item 3")
-                .unitPrice(15.5)
+                .unitPrice(new BigDecimal(15.5))
                 .description("Desc 3")
                 .kcalPer100g(1000)
                 .build();

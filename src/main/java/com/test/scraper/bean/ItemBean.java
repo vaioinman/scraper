@@ -4,6 +4,8 @@ package com.test.scraper.bean;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @EqualsAndHashCode
@@ -13,7 +15,7 @@ public class ItemBean {
     private String title;
 
     @JsonProperty("unit_price")
-    private Double unitPrice;
+    private BigDecimal unitPrice;
 
     private String description;
 

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,7 +35,7 @@ public class PageParserTest {
         // Given a valid product page
         ItemBean stub = ItemBean.builder()
                 .title("Stub")
-                .unitPrice(1.0)
+                .unitPrice(new BigDecimal(1.0))
                 .description("Stub")
                 .kcalPer100g(1)
                 .build();
